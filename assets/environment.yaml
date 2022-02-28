@@ -1,0 +1,56 @@
+virt:
+  box: peru/ubuntu-20.04-server-amd64
+
+env_common:
+  ostype: linux
+  arch: amd64
+  assets: /tmp/assets
+  domain: .example.com
+  datadisk: /dev/vdb
+
+services:
+  nexus:
+    ip: 192.168.122.100
+    ports:
+      apt:        8081
+      dockerhub:  5000
+  rke2:
+    version: latest
+
+nodes:
+  - name: cp
+    type: control-plane
+    mem: 2048
+    cpus: 2
+    data: 10G
+    interfaces:
+      - ip: 192.168.122.220
+        auto_config: "True"
+        network_name: repo-net
+        method: static
+        type: private_network
+      - ip: 192.168.123.20
+        auto_config: "True"
+        network_name: rke2
+        method: static
+        type: private_network
+
+  - name: w01
+    type: worker
+    mem: 2048
+    cpus: 2
+    data: 10G
+    interfaces:
+      - ip: 192.168.122.221
+        auto_config: "True"
+        network_name: repo-net
+        method: static
+        type: private_network
+      - ip: 192.168.123.21
+        auto_config: "True"
+        network_name: rke2
+        method: static
+        type: private_network
+
+
+# variable.tr("@", #{i})
