@@ -9,18 +9,26 @@ if [ ! -d $exedir/bin ]; then
 fi
 
 # get yq yaml-parser
-echo 'Pulling binary: yq'
-OS=`cat assets/environment.yaml|grep ostype|sed 's/\(.*\)ostype: \(.*\)/\2/g'`
-ARCH=`cat assets/environment.yaml|grep arch|sed 's/\(.*\)arch: \(.*\)/\2/g'`
-wget -qO $exedir/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_$OS_$ARCH
-
-# get rke2
-echo 'Pulling binary: rke2'
-source assets/gitrepos/shell-toolz/toolz_github.sh
-VERSION=$(yq e .services.rke2.version assets/environment.yaml)
-
-if [ "$VERSION" = "latest" ]; then
-    VERSION=''      #empty = latest
+if [ ! -f $exedir/bin/yq ]; then
+    echo 'Pulling binary: yq'
+    OS=`cat $exedir/environment.yaml|grep ostype|sed 's/\(.*\)ostype: \(.*\)/\2/g'`
+    ARCH=`cat $exedir/environment.yaml|grep arch|sed 's/\(.*\)arch: \(.*\)/\2/g'`
+    wget -qO $exedir/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_$OS\_$ARCH
 fi
 
-wget -qO $exedir/bin/rke2 $(GH_GetFileDownloadURL rancher/rke2 rke2.$OS-$ARCH $VERSION)
+# get rke2
+if [ ! -f $exedir/bin/rke2 ]; then
+    echo 'Pulling rke2 artifacts ...'
+    source assets/gitrepos/shell-toolz/toolz_github.sh
+    RELEASE=$(yq e .services.rke2.release assets/environment.yaml)
+    CNI=$(yq e .services.rke2.cni assets/environment.yaml)
+
+    if [ "$RELEASE" = "latest" ]; then
+        RELEASE=''      #empty = latest
+    fi
+
+    wget -qO $exedir/bin/rke2-images-$CNI.$OS-$ARCH.tar.gz $(GH_GetFileDownloadURL rancher/rke2 rke2-images-$CNI.$OS-$ARCH.tar.gz $RELEASE)
+    wget -qO $exedir/bin/rke2.$OS-$ARCH.tar.gz $(GH_GetFileDownloadURL rancher/rke2 rke2.$OS-$ARCH.tar.gz $RELEASE)
+    wget -qO $exedir/bin/sha256sum-$ARCH.txt $(GH_GetFileDownloadURL rancher/rke2 sha256sum-$ARCH.txt $RELEASE)
+    wget -qO $exedir/bin/rke2-install.sh https://get.rke2.io
+fi

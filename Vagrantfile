@@ -89,21 +89,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
             node.vm.provision :reload
             node.vm.provision "file", source: "assets" , destination: "#{ASSETS}"
-            node.vm.provision :shell, :path => "assets/provision_rke2.sh", :args => ["install"]
-            #node.vm.provision :shell, :path => "assets/provision_gluster.sh", :args => ["install"]
-            #
-            #if nodes["type"] == "init"
-            #    node.vm.provision :shell, :path => "assets/provision_gluster.sh", :args => ["peer"]
-            #    node.vm.provision :shell, :path => "assets/provision_gluster.sh", :args => ["mkvol"]
-            #    node.vm.provision :shell, :path => "assets/provision_docker.sh", :args => ["swarm-rollout"]
-            #end
-            #
-            #node.vm.provision :shell, :path => "assets/provision_gluster.sh", :args => ["mntvol"]
-            #node.vm.provision :shell, :path => "assets/provision_keepalived.sh"
-            #
-            #if nodes["type"] == "init"
-            #    node.vm.provision :shell, :path => "assets/deploy_stacks.sh"
-            #end
+
+            if nodes["type"] == "server"
+                node.vm.provision :shell, :path => "assets/provision_rke2.sh", :args => ["install-server"]
+            end
+            if nodes["type"] == "agent"
+                node.vm.provision :shell, :path => "assets/provision_rke2.sh", :args => ["install-server"]
+            end
+
         end
     end
 end

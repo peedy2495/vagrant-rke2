@@ -15,11 +15,12 @@ services:
       apt:        8081
       dockerhub:  5000
   rke2:
-    version: latest
+    release: latest
+    cni: canal      # canal(default)|cilium|core|harvester|multus|vsphere
 
 nodes:
-  - name: cp
-    type: control-plane
+  - name: srv
+    type: server
     mem: 2048
     cpus: 2
     data: 10G
@@ -35,8 +36,8 @@ nodes:
         method: static
         type: private_network
 
-  - name: w01
-    type: worker
+  - name: a01
+    type: agent
     mem: 2048
     cpus: 2
     data: 10G
@@ -51,6 +52,3 @@ nodes:
         network_name: rke2
         method: static
         type: private_network
-
-
-# variable.tr("@", #{i})
