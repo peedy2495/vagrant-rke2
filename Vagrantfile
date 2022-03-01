@@ -61,26 +61,27 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             ints = nodes["interfaces"]
             ints.each do |int|
                 if int["method"] == "static" and int["type"] == "private_network" and int["network_name"] != "None" and int["auto_config"] == "True"
-                    node.vm.network "private_network", ip: int["ip"], virtualbox__intnet: int["network_name"]
+                    node.vm.network :private_network, :ip => int["ip"], :libvirt__network_name => int["network_name"]
                 end
                 if int["method"] == "static" and int["type"] == "private_network" and int["network_name"] != "None" and int["auto_config"] == "False"
-                    node.vm.network "private_network", ip: int["ip"], virtualbox__intnet: int["network_name"], auto_config: false
+                    node.vm.network :private_network, :ip => int["ip"], :libvirt__network_name => int["network_name"], auto_config: false
                 end
                 if int["method"] == "static" and int["type"] == "private_network" and int["network_name"] == "None" and int["auto_config"] == "True"
-                    node.vm.network "private_network", ip: int["ip"]
+                    node.vm.network :private_network, :ip => int["ip"]
                 end
                 if int["method"] == "static" and int["type"] == "private_network" and int["network_name"] == "None" and int["auto_config"] == "False"
-                    node.vm.network "private_network", ip: int["ip"], auto_config: false
+                    node.vm.network :private_network, :ip => int["ip"], auto_config: false
                 end
                 if int["method"] == "dhcp" and int["type"] == "private_network"
-                    node.vm.network "private_network", type: "dhcp"
+                    node.vm.network :private_network, :type => "dhcp"
                 end
             end
 
             node.vm.provider "libvirt" do |libvirt|
+                libvirt.uri = 'qemu:///system'
                 libvirt.memory = nodes["mem"]
                 libvirt.cpus = nodes["cpus"]
-                libvirt.storage_pool_name = "machines"
+                libvirt.storage_pool_name = "default"
                 libvirt.driver = "kvm"
                 libvirt.cpu_mode = 'host-model'
                 libvirt.cpu_model = 'qemu64'

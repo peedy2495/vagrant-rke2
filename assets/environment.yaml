@@ -10,45 +10,50 @@ env_common:
 
 services:
   nexus:
-    ip: 192.168.122.100
+    ip: 192.168.122.1
     ports:
       apt:        8081
       dockerhub:  5000
   rke2:
     release: latest
     cni: canal      # canal(default)|cilium|core|harvester|multus|vsphere
+  mysql:
+    ip: 192.168.122.101
+    db:
+    user:
+    pwd:
 
 nodes:
   - name: srv
     type: server
-    mem: 2048
-    cpus: 2
+    mem: 1024
+    cpus: 1
     data: 10G
     interfaces:
       - ip: 192.168.122.220
         auto_config: "True"
-        network_name: repo-net
+        network_name: default
         method: static
         type: private_network
       - ip: 192.168.123.20
         auto_config: "True"
-        network_name: rke2
+        network_name: cluster
         method: static
         type: private_network
 
   - name: a01
     type: agent
-    mem: 2048
-    cpus: 2
+    mem: 1024
+    cpus: 1
     data: 10G
     interfaces:
       - ip: 192.168.122.221
         auto_config: "True"
-        network_name: repo-net
+        network_name: default
         method: static
         type: private_network
       - ip: 192.168.123.21
         auto_config: "True"
-        network_name: rke2
+        network_name: cluster
         method: static
         type: private_network
