@@ -8,11 +8,12 @@ if [ ! -d $exedir/bin ]; then
     mkdir $exedir/bin
 fi
 
+OS=`cat $exedir/environment.yaml|grep ostype|sed 's/\(.*\)ostype: \(.*\)/\2/g'`
+ARCH=`cat $exedir/environment.yaml|grep arch|sed 's/\(.*\)arch: \(.*\)/\2/g'`
+
 # get yq yaml-parser
 if [ ! -f $exedir/bin/yq ]; then
     echo 'Pulling binary: yq'
-    OS=`cat $exedir/environment.yaml|grep ostype|sed 's/\(.*\)ostype: \(.*\)/\2/g'`
-    ARCH=`cat $exedir/environment.yaml|grep arch|sed 's/\(.*\)arch: \(.*\)/\2/g'`
     wget -qO $exedir/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_$OS\_$ARCH
 fi
 
@@ -20,8 +21,6 @@ fi
 if [ ! -f $exedir/bin/rke2-install.sh ]; then
     echo 'Pulling rke2 artifacts ...'
     source assets/gitrepos/shell-toolz/toolz_github.sh
-    OS=$(yq e .env_common.ostype assets/environment.yaml)
-    ARCH=$(yq e .env_common.arch assets/environment.yaml)
     RELEASE=$(yq e .services.rke2.release assets/environment.yaml)
     CNI=$(yq e .services.rke2.cni assets/environment.yaml)
 
@@ -36,11 +35,9 @@ if [ ! -f $exedir/bin/rke2-install.sh ]; then
 fi
 
 # get SeaweedFS
-if [ ! -f $exedir/bin/weed ]; then
+if [ ! -f $exedir/bin/weed-$OS\_$ARCH.tar.gz ]; then
     echo 'Pulling rke2 artifacts ...'
     source assets/gitrepos/shell-toolz/toolz_github.sh
-    OS=$(yq e .env_common.ostype assets/environment.yaml)
-    ARCH=$(yq e .env_common.arch assets/environment.yaml)
     RELEASE=$(yq e .services.seaweedfs.release assets/environment.yaml)
 
     if [ "$RELEASE" = "latest" ]; then
