@@ -17,6 +17,8 @@ services:
   rke2:
     release: latest
     cni: canal      # canal(default)|cilium|core|harvester|multus|vsphere
+  seaweedfs:
+    release: latest
   mysql:
     ip: 192.168.122.101
     db:
