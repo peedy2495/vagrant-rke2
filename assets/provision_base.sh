@@ -50,9 +50,9 @@ for node in $(yq e .nodes[].name? $ASSETS/environment.yaml); do
 done
 
 # prepare separate data volume
-datadisk=$(yq e .env_common.datadisk $ASSETS/environment.yaml)
+DATADISK=$(yq e .env_common.datadisk $ASSETS/environment.yaml)
 mkdir /data
 chmod go+rw /data
-mkfs.ext4 $datadisk
-echo "$datadisk        /data   ext4    defaults        0 1" >> /etc/fstab
+mkfs.ext4 $DATADISK
+echo "$DATADISK        /data   ext4    defaults        0 1" >> /etc/fstab
 mount -a

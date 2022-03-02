@@ -1,10 +1,10 @@
 #!/bin/bash
 
-exe=$(realpath $0)
-exedir=$(dirname $exe)
+EXE=$(realpath $0)
+EXEDIR=$(dirname $EXE)
 
-if [ ! -d $exedir/gitrepos ]; then
-    mkdir $exedir/gitrepos
+if [ ! -d $EXEDIR/gitrepos ]; then
+    mkdir $EXEDIR/gitrepos
 fi
 
-git clone https://github.com/peedy2495/shell-toolz.git $exedir/gitrepos/shell-toolz 2>/dev/null
+git clone https://github.com/peedy2495/shell-toolz.git $EXEDIR/gitrepos/shell-toolz 2>/dev/null

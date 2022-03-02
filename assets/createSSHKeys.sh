@@ -1,12 +1,12 @@
 #!/bin/bash
 
-exe=$(realpath $0)
-exedir=$(dirname $exe)
+EXE=$(realpath $0)
+EXEDIR=$(dirname $EXE)
 
-if [ ! -d $exedir/certs ]; then
-    mkdir $exedir/certs
+if [ ! -d $EXEDIR/certs ]; then
+    mkdir $EXEDIR/certs
 fi
 
-if [ ! -f $exedir/certs/id_rsa ]; then
-    ssh-keygen -t rsa -P "" -f $exedir/certs/id_rsa
+if [ ! -f $EXEDIR/certs/id_rsa ]; then
+    ssh-keygen -t rsa -P "" -f $EXEDIR/certs/id_rsa
 fi
