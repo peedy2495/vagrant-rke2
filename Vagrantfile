@@ -95,7 +95,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 node.vm.provision :shell, :path => "assets/provision_rke2.sh", :args => ["install-server"]
             end
             if nodes["type"] == "agent"
-                node.vm.provision :shell, :path => "assets/provision_rke2.sh", :args => ["install-server"]
+                node.vm.provision :shell, :path => "assets/provision_rke2.sh", :args => ["install-agent"]
             end
 
         end

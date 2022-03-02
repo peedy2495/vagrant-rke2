@@ -3,7 +3,6 @@
 exe=$(realpath $0)
 exedir=$(dirname $exe)
 
-
 if [ ! -d $exedir/gitrepos ]; then
     mkdir $exedir/gitrepos
 fi

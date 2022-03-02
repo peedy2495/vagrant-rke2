@@ -3,7 +3,6 @@
 exe=$(realpath $0)
 exedir=$(dirname $exe)
 
-
 if [ ! -d $exedir/bin ]; then
     mkdir $exedir/bin
 fi
@@ -32,6 +31,13 @@ if [ ! -f $exedir/bin/rke2-install.sh ]; then
     wget -qO $exedir/bin/rke2.$OS-$ARCH.tar.gz $(GH_GetFileDownloadURL rancher/rke2 rke2.$OS-$ARCH.tar.gz $RELEASE)
     wget -qO $exedir/bin/sha256sum-$ARCH.txt $(GH_GetFileDownloadURL rancher/rke2 sha256sum-$ARCH.txt $RELEASE)
     wget -qO $exedir/bin/rke2-install.sh https://get.rke2.io
+fi
+
+# get kubectl
+if [ ! -f $exedir/bin/kubectl ]; then
+    echo 'Pulling binary: kubectl'
+    STABLE=$(wget -qO- https://dl.k8s.io/release/stable.txt)
+    wget -qO $exedir/bin/kubectl https://dl.k8s.io/release/$STABLE/bin/linux/amd64/kubectl
 fi
 
 # get SeaweedFS
