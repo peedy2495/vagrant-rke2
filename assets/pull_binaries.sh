@@ -40,15 +40,35 @@ if [ ! -f $EXEDIR/bin/kubectl ]; then
     wget -O $EXEDIR/bin/kubectl https://dl.k8s.io/release/$STABLE/bin/linux/amd64/kubectl
 fi
 
-# get SeaweedFS
-if [ ! -f $EXEDIR/bin/weed-$OS\_$ARCH.tar.gz ]; then
-    echo 'Pulling rke2 artifacts ...'
+# get helm
+if [ ! -f $EXEDIR/bin/helm ]; then
+    echo 'Pulling binary: helm'
     source assets/gitrepos/shell-toolz/toolz_github.sh
-    RELEASE=$(yq e .services.seaweedfs.release assets/environment.yaml)
+    RELEASE=$(yq e .services.helm.release assets/environment.yaml)
 
     if [ "$RELEASE" = "latest" ]; then
-        RELEASE=''      #empty = latest
+        RELEASE=`GH_GetLatestVersion helm/helm`
     fi
 
-    wget -O $EXEDIR/bin/weed-$OS\_$ARCH.tar.gz $(GH_GetFileDownloadURL chrislusf/seaweedfs $OS\_$ARCH.tar.gz $RELEASE)
+    wget -O $EXEDIR/bin/helm-$RELEASE-$OS-$ARCH.tar.gz https://get.helm.sh/helm-$RELEASE-$OS-$ARCH.tar.gz
+    pushd $EXEDIR/bin
+    tar -zxvf helm-$RELEASE-$OS-$ARCH.tar.gz
+    rm -f helm-$RELEASE-$OS-$ARCH.tar.gz
+    mv $OS-$ARCH/helm .
+    rm -rf $OS-$ARCH
+    popd
 fi
+
+
+# get SeaweedFS
+#if [ ! -f $EXEDIR/bin/weed-$OS\_$ARCH.tar.gz ]; then
+#    echo 'Pulling rke2 artifacts ...'
+#    source assets/gitrepos/shell-toolz/toolz_github.sh
+#    RELEASE=$(yq e .services.seaweedfs.release assets/environment.yaml)
+#
+#    if [ "$RELEASE" = "latest" ]; then
+#        RELEASE=''      #empty = latest
+#    fi
+#
+#    wget -O $EXEDIR/bin/weed-$OS\_$ARCH.tar.gz $(GH_GetFileDownloadURL chrislusf/seaweedfs $OS\_$ARCH.tar.gz $RELEASE)
+#fi

@@ -10,26 +10,21 @@ env_common:
 
 services:
   nexus:
-    ip: 192.168.122.1
+    ip: 192.168.122.100
     ports:
       apt:        8081
       dockerhub:  5000
   rke2:
     release: latest
     cni: canal      # canal(default)|cilium|core|harvester|multus|vsphere
-  seaweedfs:
+  helm:
     release: latest
-  mysql:
-    ip: 192.168.122.101
-    db:
-    user:
-    pwd:
 
 nodes:
   - name: srv
     type: server
-    mem: 1024
-    cpus: 1
+    mem: 10240
+    cpus: 3
     data: 10G
     interfaces:
       - ip: 192.168.122.220
@@ -39,14 +34,14 @@ nodes:
         type: private_network
       - ip: 192.168.123.20
         auto_config: "True"
-        network_name: cluster
+        network_name: "Instances Network"
         method: static
         type: private_network
 
   - name: a01
     type: agent
-    mem: 1024
-    cpus: 1
+    mem: 10240
+    cpus: 3
     data: 10G
     interfaces:
       - ip: 192.168.122.221
@@ -56,6 +51,6 @@ nodes:
         type: private_network
       - ip: 192.168.123.21
         auto_config: "True"
-        network_name: cluster
+        network_name: "Instances Network"
         method: static
         type: private_network
