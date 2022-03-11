@@ -1,13 +1,8 @@
-
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  labels:
-    app.kubernetes.io/instance: vault
-    app.kubernetes.io/name: vault
-    component: server
   name: data-vault-0
-  namespace: default
+  namespace: vault
 spec:
   accessModes:
   - ReadWriteOnce
@@ -15,8 +10,16 @@ spec:
     requests:
       storage: 2Gi
   volumeMode: Filesystem
-status:
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data-vault-1
+  namespace: vault
+spec:
   accessModes:
   - ReadWriteOnce
-  capacity:
-    storage: 3Gi
+  resources:
+    requests:
+      storage: 2Gi
+  volumeMode: Filesystem

@@ -12,5 +12,5 @@ spec:
         mountPath: /v1/auth/kubernetes
         role: issuer
         secretRef:
-          name: $ISSUER_SECRET_REF
+          name: ${ISSUER_SECRET_REF}
           key: token

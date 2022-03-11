@@ -81,7 +81,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 libvirt.uri = 'qemu:///system'
                 libvirt.memory = nodes["mem"]
                 libvirt.cpus = nodes["cpus"]
-                libvirt.storage_pool_name = "default"
+                libvirt.storage_pool_name = "machines"
                 libvirt.driver = "kvm"
                 libvirt.cpu_mode = 'host-model'
                 libvirt.cpu_model = 'qemu64'

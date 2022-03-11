@@ -1,0 +1,15 @@
+datacenter: we
+racks:
+- name: test
+  members: 2
+  storage:
+    capacity: 3G
+  resources:
+    limits:
+      cpu: 200m
+      memory: 3Gi
+    requests:
+      cpu: 200m
+      memory: 2Gi
+serviceMonitor:
+  create: true

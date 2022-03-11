@@ -1,16 +1,18 @@
 ## !!!!!!! Guide: https://learn.hashicorp.com/tutorials/vault/kubernetes-cert-manager  !!!!!!! ## 
 
 # PV erstellen
+mkdir /kube-data-vault # pro node
+kubectl create namespace vault
 kubectl apply -f local-pv.yaml
 
 # helm repo verbinden und vault installieren
 helm repo add hashicorp http://192.168.122.100:8081/repository/hashicorp
 helm repo update
-helm install vault hashicorp/vault --set "injector.enabled=false"
+helm install vault hashicorp/vault -f vault-chart-override-values.yaml --namespace vault
 
-# brauchen wir vermutlich nicht
-# data-vault-0 pvc löschen
-# kubectl apply -f vault-pvc.yaml
+#brauchen wir vermutlich nicht
+#data-vault-0 pvc löschen
+kubectl apply -f vault-pvc.yaml
 
 # vault entsperren
 kubectl exec vault-0 -- vault operator init -key-shares=5 -key-threshold=3 -format=json > init-keys.json
@@ -51,9 +53,8 @@ exit
 
 # Cert-Manager ausrollen
 kubectl apply --validate=false -f cert-manager.crds.yaml
-helm repo add http://192.168.122.100:8081/repository/jetstack/
+helm repo add jetstack http://192.168.122.100:8081/repository/jetstack/
 helm repo update
-kubectl apply -f cert-manager.crds.yaml
 helm install \
   cert-manager jetstack/cert-manager \
   --namespace cert-manager \

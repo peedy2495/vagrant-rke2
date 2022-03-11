@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: scylla
+
+---  
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: scylla-pv1-srv
+  namespace: scylla
+spec:
+  capacity:
+    storage: 4Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  local:
+    path: /kube-data-scylla
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - srv.example.com
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: scylla-pv2-srv
+  namespace: scylla
+spec:
+  capacity:
+    storage: 4Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  local:
+    path: /kube-data-scylla
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - srv.example.com
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: scylla-pv-a01
+  namespace: scylla
+spec:
+  capacity:
+    storage: 4Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  local:
+    path: /kube-data-scylla
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - a01.example.com
+
