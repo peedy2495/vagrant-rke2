@@ -1,4 +1,4 @@
 mirrors:
   docker.io:
     endpoint:
-      - "https://REPO_IP:DOCKERHUB"
+      - "http://REPO_IP:DOCKERHUB"
