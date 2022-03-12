@@ -13,6 +13,10 @@ openssl genrsa -out rootCA.key 4096
 openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 3650 -out rootCA.crt
 
 # key und crt baes64 codiert speichern
-cat rootCA.crt | base64 -w0
+cat *.key | base64 -w0 > root-key.pem
+cat *.crt | base64 -w0 > root-crt.pem
 
 
+# use the chance to sign certs for keycloak as well
+openssl req -newkey rsa:2048 -nodes -keyout keycloak.key -out keycloak.csr
+openssl x509 -req -CA rootCA.crt -CAkey rootCA.key -in keycloak.csr -out keycloak.crt -days 3650 -CAcreateserial 

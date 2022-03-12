@@ -40,7 +40,7 @@ cqlsh
 # operator
 helm install scylla-operator scylla/scylla-operator --values operator-config.yaml --namespace scylla-operator
 # cluster
-# edit validatingwebhookconfiguration to include secret name
+kubectl edit validatingwebhookconfiguration scylla-operator # must include certificates secret-name
 helm install scylla scylla/scylla --values cluster-config.yaml --namespace scylla
 # manager
 kubectl apply -f scylla-manager-pv.yaml
