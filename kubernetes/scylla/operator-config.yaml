@@ -10,5 +10,5 @@ resources:
     cpu: 100m
     memory: 32Mi
 webhook:
-  createSelfSignedCertificate: true
+  createSelfSignedCertificate: false
   certificateSecretName:  scylla-operator-cert

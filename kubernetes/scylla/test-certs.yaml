@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: scylla-operator
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: selfsigned-issuer
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: my-selfsigned-ca
+  namespace: scylla-operator
+spec:
+  isCA: true
+  commonName: my-selfsigned-ca
+  secretName: root-secret
+  issuerRef:
+    name: selfsigned-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: scylla-issuer
+  namespace: scylla-operator
+spec:
+  ca:
+    secretName: root-secret
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: scylla-operator-serving-cert
+  namespace: scylla-operator
+spec:
+  secretName: scylla-operator-serving-cert
+  issuerRef:
+    name: scylla-issuer
+  dnsNames:
+  - scylla-operator-webhook.scylla-operator.svc
